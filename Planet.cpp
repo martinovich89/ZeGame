@@ -53,9 +53,9 @@ void	Planet::roll(unsigned i, double starSize, unsigned planetAmount)
 
 	_resources[0] = 1;
 	_resources[1] = 1;
-	for (unsigned i = 2; i < 6; i++)
+	for (unsigned j = 2; j < 6; j++)
 	{
-		_resources[i] = (i == randResource);
+		_resources[j] = (j == randResource);
 	}
 
 	setDist(my_random((starSize * (10000.0 - 50.0) * min), starSize * (10000.0 - 50.0) * max));
