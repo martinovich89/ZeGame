@@ -10,6 +10,7 @@ class Player
 		double				_resources[6];
 		std::vector<id>		_ownedPlanets;
 		time_t				_lastCheck;
+		size_t				_extractors[6];
 
 	public :
 		Player();

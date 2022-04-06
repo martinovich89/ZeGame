@@ -2,9 +2,11 @@
 
 size_t userId = 1;
 
-Player::Player() : _id(userId), _name("unnamed"), _resources(), _lastCheck(get_time())
+Player::Player() : _id(userId), _name("unnamed"), _resources(), _lastCheck(get_time()), _extractors()
 {
 	(void)_resources;
+	_extractors[1] = 1;
+	_extractors[3] = 3;
 	userId++;
 }
 
@@ -52,9 +54,10 @@ void	Player::colonize(Planet &planet)
 
 void	Player::updateResources()
 {
+	time_t timeLapse = get_time() - _lastCheck;
+	_lastCheck = get_time();
 	for (unsigned i = 0; i < 6; i++)
 	{
-		_resources[i] += (get_time() - _lastCheck) / 1000000.0;
+		_resources[i] += timeLapse / 1000000.0 * _extractors[i];
 	}
-	_lastCheck = get_time();
 }
