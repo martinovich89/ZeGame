@@ -1,8 +1,9 @@
 #include "Realm.hpp"
+#include "Menu.hpp"
 
 
 std::string	resources[6] = {"Ore", "Gaz", "Pearl", "Aether", "Uranium", "Adamantium"};
-int menu = 1;
+int menu_type = 1;
 
 void	display_player(Player &player)
 {
@@ -84,64 +85,79 @@ void	display_system(System &system)
 	mvprintw(y,x,"Back to previous menu");
 }
 
-int	display_arrow(int c, int width, int attr, int count, int newline)
+int	display_arrow(int c, int attr, int count, int newline, Menu &menu)
 {
-	int offset = 3;
-	static int arrow_x = 0;
-	static int arrow_y = 0 + offset;
+	int offset = menu.getPlayerOffset() + menu.getDisplayOffset();
 	int ret = 0;
 
-	if (c == 119 && arrow_y > 0 + offset)
+	if (c == 119 && menu.getArrowY() > 0 + offset)
 	{
-		mvprintw(arrow_y,arrow_x," ");
-		arrow_y -= 2;
+		mvprintw(menu.getArrowY(),menu.getArrowX()," ");
+		menu.setArrowY(menu.getArrowY() - newline);
 	}
-	else if (c == 97 && arrow_x > 0)
+	else if (c == 97 && menu.getArrowX() > 0)
 	{
-		mvprintw(arrow_y,arrow_x," ");
-		arrow_x -= width / attr;
+		mvprintw(menu.getArrowY(),menu.getArrowX()," ");
+		menu.setArrowX(menu.getArrowX() - TERM_WIDTH / attr);
 	}
-	else if (c == 115 && arrow_y < newline * count + offset)
+	else if (c == 115 && menu.getArrowY() < newline * (count - 1) + offset)
 	{
-		mvprintw(arrow_y,arrow_x," ");
-		arrow_y += 2;
+		mvprintw(menu.getArrowY(),menu.getArrowX()," ");
+		menu.setArrowY(menu.getArrowY() + newline);
 	}
-	else if (c == 115 && arrow_y < newline * (count + 1) + offset && arrow_x == 0 && menu > 1)
+	else if (c == 115 && menu.getArrowY() < newline * (count) + offset && menu.getArrowX() == 0 && menu_type > 1)
 	{
-		mvprintw(arrow_y,arrow_x," ");
-		arrow_y += 2;
+		mvprintw(menu.getArrowY(),menu.getArrowX()," ");
+		menu.setArrowY(menu.getArrowY() + newline);
 	} 
-	else if (c == 100 && arrow_y <= newline * count + offset && arrow_x < static_cast<int>(static_cast<double>(attr - 1) * static_cast<double>(width / attr)))
+	else if (c == 100 && menu.getArrowY() < newline * (count) + offset && menu.getArrowX() < static_cast<int>(static_cast<double>(attr - 1) * static_cast<double>(TERM_WIDTH / attr)))
 	{
-		mvprintw(arrow_y,arrow_x," ");
-		arrow_x += width / attr;
+		mvprintw(menu.getArrowY(),menu.getArrowX()," ");
+		menu.setArrowX(menu.getArrowX() + TERM_WIDTH / attr);
 	}
-	else if (c == 101 && menu > 1 && arrow_x == 0 && arrow_y == newline * (count + 1) + offset)
+	else if (c == 101 && menu_type > 1 && menu.getArrowX() == 0 && menu.getArrowY() == newline * (count) + offset)
 	{
 		clear();
-		menu--;
-		arrow_y = offset; arrow_x = 0;
+		menu_type--;
+		menu.setArrowY(offset); menu.setArrowX(0);
 		return (0);
 	}
-	else if (c == 101 && menu < 3 && arrow_y != offset)
+	else if (c == 101 && menu_type < 3 && menu.getArrowY() >= offset)
 	{
 		clear();
-		menu++;
-		ret = (arrow_y - offset) / 2;
-		arrow_y = offset; arrow_x = 0;
+		menu_type++;
+		ret = (menu.getArrowY() - offset + newline) / 2;
+		menu.setArrowY(offset); menu.setArrowX(0);
 		return (ret);
 	}
-	mvprintw(arrow_y,arrow_x,">");
+	mvprintw(menu.getArrowY(),menu.getArrowX(),">");
 	return (0);
 }
 
 void	display_planet(Planet &planet)
 {
 	(void)planet;
+	int offset = 3;
+	int x = 1;
+	int y = 0 + offset;
+
+	// planet attributes
+	mvprintw(y,x,"BUILD");
+	y += 2;
+	mvprintw(y,x,"DESTROY");
+	y += 2;
+	mvprintw(y,x,"ANALYSIS");
+
+	y += 2;
+	x = 1;
+	mvprintw(y,x,"Back to previous menu");
 }
 
 int main(void)
 {
+	Menu galaxy(1 * 2);
+	Menu system(1 * 2);
+	Menu planet(0);
 	Player Martin;
 	Galaxy bigMama;
 	time_t chrono;
@@ -175,21 +191,22 @@ int main(void)
 
 		Martin.updateResources();
 
-		switch (menu)
+		switch (menu_type)
 		{
 			case 1:
 				toDisplay = 0;
 				display_galaxy(bigMama);
-				ret = display_arrow(c, TERM_WIDTH, SYSTEM_ATTRIBUTES, SYSTEM_ACCOUNT, GALAXY_MENU_NEWLINE);
+				ret = display_arrow(c, SYSTEM_ATTRIBUTES, SYSTEM_ACCOUNT, GALAXY_MENU_NEWLINE, galaxy);
 				break;
 			case 2:
 				toDisplay = (ret != 0) ? ret : toDisplay;
 				display_system(bigMama.getSys((toDisplay & 0xFF) - 1));
-				ret = display_arrow(c, TERM_WIDTH, PLANET_ATTRIBUTES, bigMama.getSys((toDisplay & 0xFF) - 1).getPlanetAmount(), SYSTEM_MENU_NEWLINE);
+				ret = display_arrow(c, PLANET_ATTRIBUTES, bigMama.getSys((toDisplay & 0xFF) - 1).getPlanetAmount(), SYSTEM_MENU_NEWLINE, system);
 				break;
 			case 3:
 				toDisplay |= (ret != 0) ? ret << 8 : toDisplay;
 				display_planet(bigMama.getSys((toDisplay & 0xFF) - 1).getPlanet((toDisplay >> 8) - 1));
+				ret = display_arrow(c, PLANET_MENU_COLUMNS, PLANET_MENU_OPTIONS, PLANET_MENU_NEWLINE, planet);
 				break;
 		}
 

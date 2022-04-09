@@ -1,12 +1,12 @@
 NAME			=	zeGame
 
-HEADERS			=	Galaxy.hpp System.hpp Planet.hpp Comet.hpp Utils.hpp Realm.hpp Player.hpp
+HEADERS			=	Galaxy.hpp System.hpp Planet.hpp Comet.hpp Utils.hpp Realm.hpp Player.hpp Menu.hpp
 
 INC				=	-I./
 
 SRC_PATH		=	./
 
-SRCS			=	main.cpp Galaxy.cpp System.cpp Planet.cpp Comet.cpp Utils.cpp Player.cpp
+SRCS			=	main.cpp Galaxy.cpp System.cpp Planet.cpp Comet.cpp Utils.cpp Player.cpp Menu.cpp
 
 OBJS			=	$(SRCS:.cpp=.o)
 
