@@ -282,6 +282,10 @@ int main(void)
 				if (menus.size() < 2)
 					menus.push_back(new Menu(menus.back()->pick_selectable(bigMama, menus), menus.back()->pick_displayable(bigMama, menus)));
 				break;
+			case 'q':
+				if (menus.size() > 1)
+					menus.pop_back();
+				break;
 		}
 
 		box(win, 0, 0);
