@@ -25,6 +25,8 @@ System::System()
 //		_planets.push_back(sample);
 		_planets[i].setId(_id << 8 | i);
 		_selectables.push_back("Planet" + std::to_string(i));
+		_displayables[i].push_back("Planet is " + std::to_string(getPlanet(i).getDist()) + " away from the star");
+		_displayables[i].push_back("Planet has oceans");
 	}
 }
 

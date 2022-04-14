@@ -68,13 +68,12 @@ std::vector<std::string> &Menu::pick_selectable(Galaxy &galaxy, const std::vecto
 	switch (menus.size())
 	{
 		case 1:
-			return (galaxy.getSelectables());
-			break;
-		case 2:
 			return (galaxy.getSys(menus[0]->_selected).getSelectables());
 			break;
-		case 3:
+		case 2:
 			return (galaxy.getSys(menus[0]->_selected).getPlanet(menus[1]->_selected).getSelectables());
+			break;
+		case 3:
 			break;
 	}
 	return (galaxy.getSys(menus[0]->_selected).getSelectables());
@@ -88,13 +87,12 @@ std::vector<std::string> *Menu::pick_displayable(Galaxy &galaxy, const std::vect
 	switch (menus.size())
 	{
 		case 1:
-			return galaxy.getDisplayables();
+			return (galaxy.getSys(menus[0]->_selected).getDisplayables());
 			break;
 		case 2:
-			return galaxy.getSys(menus[0]->_selected).getDisplayables();
+			return (galaxy.getSys(menus[0]->_selected).getPlanet(menus[1]->_selected).getDisplayables());
 			break;
 		case 3:
-			return galaxy.getSys(menus[0]->_selected).getPlanet(menus[1]->_selected).getDisplayables();
 			break;
 	}
 	return (galaxy.getSys(menus[0]->_selected).getDisplayables());

@@ -278,11 +278,11 @@ int main(void)
 			case 'd':
 				(*menus.back())++;
 				break;
-/*			case 'e':
-				if (menus.size() < 3)
+			case 'e':
+				if (menus.size() < 2)
 					menus.push_back(new Menu(menus.back()->pick_selectable(bigMama, menus), menus.back()->pick_displayable(bigMama, menus)));
 				break;
-*/		}
+		}
 
 		box(win, 0, 0);
 		Martin.updateResources();
