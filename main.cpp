@@ -284,7 +284,10 @@ int main(void)
 				break;
 			case 'q':
 				if (menus.size() > 1)
+				{
+					delete menus.back();
 					menus.pop_back();
+				}
 				break;
 		}
 
