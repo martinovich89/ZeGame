@@ -5,7 +5,9 @@ Planet::Planet()
 	_size(my_random(STARSIZE_MIN / 200.0, STARSIZE_MIN / 20.0)),
 	_resources(),
 	_hasOceans(my_random(0, 1 + INCLUSIVE)),
-	_hasAtmosphere(my_random(0, 1 + INCLUSIVE))
+	_hasAtmosphere(my_random(0, 1 + INCLUSIVE)),
+	_ownerId(0),
+	_displayable_actions(new std::vector<std::string>[8])
 {
 	unsigned randResource = my_random(2, 6);
 
@@ -15,11 +17,14 @@ Planet::Planet()
 	{
 		_resources[i] = (i == randResource);
 	}
+	_selectable_actions.push_back("BUILD");
+	_selectable_actions.push_back("DESTROY");
+	_selectable_actions.push_back("COLONIZE");
 }
 
 Planet::~Planet()
 {
-
+	delete [] _displayable_actions;
 }
 
 Planet::Planet(const Planet &other)
@@ -102,6 +107,16 @@ id		Planet::getOwnerId() const
 id		Planet::getId() const
 {
 	return _id;
+}
+
+std::vector<std::string> &Planet::getSelectables()
+{
+	return _selectable_actions;
+}
+
+std::vector<std::string> *Planet::getDisplayables()
+{
+	return _displayable_actions;
 }
 
 std::ostream	&operator<<(std::ostream &out, Planet &toPrint)

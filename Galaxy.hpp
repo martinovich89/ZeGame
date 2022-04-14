@@ -2,12 +2,17 @@
 
 #include "System.hpp"
 #include <iostream>
+#include <string>
+#include <sstream>
+//#include <vector>
 
 class Galaxy
 {
 	private :
-		System		*_sysTab;
-		unsigned	_sysAmount;
+		System						*_sysTab;
+		unsigned					_sysAmount;
+		std::vector<std::string>	_selectables;
+		std::vector<std::string>	*_displayables;
 
 	public :
 		Galaxy();
@@ -19,6 +24,8 @@ class Galaxy
 		
 		System	&getSys(unsigned index) const;
 		unsigned getSysAmount() const;
+		std::vector<std::string> &getSelectables();
+		std::vector<std::string> *getDisplayables();
 };
 
 std::ostream	&operator<<(std::ostream &out, Galaxy &toPrint);

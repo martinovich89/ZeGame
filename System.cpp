@@ -16,19 +16,22 @@ System::System()
 :	_starSize(my_random(STARSIZE_MIN, STARSIZE_MAX)),
 	_planetAmount(my_random(PLANETAMOUNT_MIN, PLANETAMOUNT_MAX)),
 	_planets(new Planet[_planetAmount]),
-	_cometFrequency(my_random(COMETSPAN_MIN, COMETSPAN_MAX))
+	_cometFrequency(my_random(COMETSPAN_MIN, COMETSPAN_MAX)),
+	_displayables(new std::vector<std::string>[_planetAmount])
 {
 	for (size_t i = 0; i < _planetAmount; i++)
 	{
 		_planets[i].roll(i + 1, _starSize, _planetAmount);
 //		_planets.push_back(sample);
 		_planets[i].setId(_id << 8 | i);
+		_selectables.push_back("Planet" + std::to_string(i));
 	}
 }
 
 System::~System()
 {
 	delete [] _planets;
+	delete [] _displayables;
 }
 
 System::System(const System &other) : _starSize(0), _planetAmount(0), _planets(), _cometFrequency(0)
@@ -69,6 +72,16 @@ double	System::getStarSize() const
 id		System::getId() const
 {
 	return (_id);
+}
+
+std::vector<std::string> &System::getSelectables()
+{
+	return _selectables;
+}
+
+std::vector<std::string> *System::getDisplayables()
+{
+	return _displayables;
 }
 
 std::ostream &operator<<(std::ostream &out, System &toPrint)

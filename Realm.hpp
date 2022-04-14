@@ -2,6 +2,7 @@
 
 #include "Player.hpp"
 #include "Galaxy.hpp"
+#include "Menu.hpp"
 #include <iostream>
 #include <ctime>
 #include <cmath>
@@ -10,3 +11,5 @@
 #include <string>
 #include <cstring>
 #include <curses.h>
+#include <algorithm>
+#include <list>

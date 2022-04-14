@@ -7,13 +7,15 @@
 class System
 {
 	private :
-		double		_starSize;
-		unsigned	_planetAmount;
-		Planet		*_planets;
-//		std::vector<Planet>	_planets;
-		time_t		_cometFrequency;
-		Comet		_nextComet;
-		id			_id;
+		double						_starSize;
+		unsigned					_planetAmount;
+		Planet						*_planets;
+//		std::vector<Planet>			_planets;
+		time_t						_cometFrequency;
+		Comet						_nextComet;
+		id							_id;
+		std::vector<std::string>	_selectables;
+		std::vector<std::string>	*_displayables;
 
 	public :
 		System();
@@ -27,6 +29,8 @@ class System
 		unsigned			getPlanetAmount() const;
 		Planet		&getPlanet(unsigned index);
 		id			getId() const;
+		std::vector<std::string> &getSelectables();
+		std::vector<std::string> *getDisplayables();
 
 		void		setId(id id);
 };

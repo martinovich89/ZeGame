@@ -1,16 +1,20 @@
 #include "Galaxy.hpp"
 
-Galaxy::Galaxy() : _sysTab(new System[SYSTEM_ACCOUNT]), _sysAmount(SYSTEM_ACCOUNT)
+Galaxy::Galaxy() : _sysTab(new System[SYSTEM_ACCOUNT]), _sysAmount(SYSTEM_ACCOUNT), _selectables(), _displayables(new std::vector<std::string>[_sysAmount])
 {
 	for (unsigned i = 0; i < _sysAmount; i++)
 	{
 		_sysTab[i].setId(i);
+		_selectables.push_back("System" + std::to_string(i));
+		_displayables[i].push_back("There are " + std::to_string(getSys(i).getPlanetAmount()) + " planets in this system");
+		_displayables[i].push_back("The star has a radius of " + std::to_string(getSys(i).getStarSize()) + " suns");
 	}
 }
 
 Galaxy::~Galaxy()
 {
 	delete [] _sysTab;
+	delete [] _displayables;
 }
 
 Galaxy::Galaxy(const Galaxy &other) : _sysTab(new System[0]), _sysAmount(0)
@@ -45,6 +49,16 @@ System	&Galaxy::getSys(unsigned index) const
 unsigned	Galaxy::getSysAmount() const
 {
 	return (_sysAmount);
+}
+
+std::vector<std::string> &Galaxy::getSelectables()
+{
+	return _selectables;
+}
+
+std::vector<std::string> *Galaxy::getDisplayables()
+{
+	return _displayables;
 }
 
 std::ostream	&operator<<(std::ostream &out, Galaxy &toPrint)

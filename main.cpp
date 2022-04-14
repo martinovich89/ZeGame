@@ -1,10 +1,9 @@
 #include "Realm.hpp"
-#include "Menu.hpp"
 
 
 std::string	resources[6] = {"Ore", "Gaz", "Pearl", "Aether", "Uranium", "Adamantium"};
 int menu_type = 1;
-
+/*
 void	display_player(Player &player)
 {
 	int x = 0;
@@ -153,6 +152,7 @@ void	display_planet(Planet &planet)
 	mvprintw(y,x,"Back to previous menu");
 }
 
+
 int main(void)
 {
 	Menu galaxy(1 * 2);
@@ -215,5 +215,91 @@ int main(void)
 	}
 
 	endwin();
+	return (0);
+}*/
+
+int main(void)
+{
+
+	Player Martin;
+	Galaxy bigMama;
+//	time_t chrono;
+//	time_t start;
+	Menu *first = new Menu(bigMama.getSelectables(), bigMama.getDisplayables());
+
+	std::vector<Menu *> menus;
+	menus.push_back(first);
+
+	System mySystem = bigMama.getSys(my_random(0, SYSTEM_ACCOUNT - 1));
+	Martin.colonize(mySystem.getPlanet(my_random(0u, mySystem.getPlanetAmount() - 1)));
+
+/*	menus.push_back(new Menu(menus.back()->pick_selectable(bigMama, menus), menus.back()->pick_displayable(bigMama, menus)));
+	std::cout << menus.back()->_selectables.back() << std::endl;
+
+	for (Menu *element : menus)
+    	delete(element);
+
+	return (0);
+*/
+	initscr();
+	noecho();
+	curs_set(0);
+	cbreak();
+	timeout(10);
+
+	int yMax, xMax;
+	getmaxyx(stdscr, yMax, xMax);
+
+	WINDOW *win = newwin(yMax - 5, xMax, 5, 0);
+	WINDOW *win2 = newwin(4, xMax, 0, 0);
+	box(win, 0, 0);
+	box(win2, 0, 0);
+/*
+	mvwprintw(win, 0, 2, "File");
+	mvwprintw(win, 0, 7, "Edit");
+	mvwprintw(win, 0, 12, "Options");
+*/
+	keypad(win, 1);
+	set_escdelay(10);
+//	wrefresh(win);
+
+	int ch = -1;
+	int ch_display = 0;
+	while ((ch = getch()) != 27)
+	{
+		ch_display = (ch != -1) ? ch : ch_display;
+		if (ch_display)
+			mvwprintw(win, 20, 2, "%d\n", ch_display);
+		switch(ch)
+		{
+			case 'a':
+				(*menus.back())--;
+				break;
+			case 'd':
+				(*menus.back())++;
+				break;
+/*			case 'e':
+				if (menus.size() < 3)
+					menus.push_back(new Menu(menus.back()->pick_selectable(bigMama, menus), menus.back()->pick_displayable(bigMama, menus)));
+				break;
+*/		}
+
+		box(win, 0, 0);
+		Martin.updateResources();
+		menus.back()->display(win);
+		mvwprintw(win2, 1, 1, Martin.getName().c_str());
+		mvwprintw(win2, 1, xMax / 4, "|%12i|%12i|%12i|%12i|%12i|%12i|", static_cast<int>(Martin.getResource(0)), static_cast<int>(Martin.getResource(1)), static_cast<int>(Martin.getResource(2)), static_cast<int>(Martin.getResource(3)), static_cast<int>(Martin.getResource(4)), static_cast<int>(Martin.getResource(5)));
+		box(win2, 0, 0);
+
+		wrefresh(win);
+		wrefresh(win2);
+	}
+	keypad(win, 0);
+
+	for (Menu *element : menus)
+    	delete(element);
+
+	endwin();
+
 	return (0);
 }

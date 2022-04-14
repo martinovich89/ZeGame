@@ -12,7 +12,7 @@ OBJS			=	$(SRCS:.cpp=.o)
 
 CXX				=	g++
 
-CXXFLAGS			=	-Wall -Wextra -Werror -std=c++98 #-fsanitize=address -g3
+CXXFLAGS			=	-Wall -Wextra -Werror -std=c++11 -fsanitize=address -g3
 
 all : $(NAME)
 

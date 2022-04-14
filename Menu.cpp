@@ -1,6 +1,7 @@
 #include "Menu.hpp"
+#include "Realm.hpp"
 
-Menu::Menu() : _player_offset(3), _display_offset(0), _arrow_x(0), _arrow_y(_player_offset + _display_offset)
+Menu::Menu() : _arrow_x(0), _arrow_y(0), _selectables(), _displayables(), _selected()
 {
 
 }
@@ -9,7 +10,7 @@ Menu::~Menu()
 {
 
 }
-
+/*
 Menu::Menu(const Menu &other)
 {
 	*this = other;
@@ -17,26 +18,117 @@ Menu::Menu(const Menu &other)
 
 Menu	&Menu::operator=(const Menu &other)
 {
-	_player_offset = other._player_offset;
-	_display_offset = other._display_offset;
 	_arrow_x = other._arrow_x;
 	_arrow_y = other._arrow_y;
 	return (*this);
 }
 
-Menu::Menu(int display_offset) : _player_offset(3), _display_offset(display_offset), _arrow_x(0), _arrow_y(_player_offset + _display_offset)
+Menu::Menu(std::vector<std::string> &selectables, std::vector<std::string> *displayables)
 {
+	_selectables = selectables;
+	_displayables = displayables;
+	_selected = 0;
+}*/
 
+void	Menu::display(WINDOW *win)
+{
+	int x = 2;
+	int y = 0;
+	int i = 0;
+
+	for(const auto& value: _selectables)
+	{
+    	if (i == _selected)
+		{
+			wattron(win, A_STANDOUT);
+			mvwprintw(win, y, x, value.c_str());
+			wattroff(win, A_STANDOUT);
+		}
+		else
+		{
+			mvwprintw(win, y, x, value.c_str());
+		}
+		x += value.length() + 1;
+		i++;
+	}
+	i = 0;
+	x = 6;
+	y = 3;
+	for (const auto &value: _displayables[_selected])
+	{
+		mvwprintw(win, y, x, value.c_str());
+		y += 2;
+	}
 }
 
-int Menu::getPlayerOffset()
+std::vector<std::string> &Menu::pick_selectable(Galaxy &galaxy, const std::vector<Menu *> &menus)
 {
-	return _player_offset;
+//	std::vector<std::string> ret;
+
+	switch (menus.size())
+	{
+		case 1:
+			return (galaxy.getSelectables());
+			break;
+		case 2:
+			return (galaxy.getSys(menus[0]->_selected).getSelectables());
+			break;
+		case 3:
+			return (galaxy.getSys(menus[0]->_selected).getPlanet(menus[1]->_selected).getSelectables());
+			break;
+	}
+	return (galaxy.getSys(menus[0]->_selected).getSelectables());
+//	return (ret);
 }
 
-int	Menu::getDisplayOffset()
+std::vector<std::string> *Menu::pick_displayable(Galaxy &galaxy, const std::vector<Menu *> &menus)
 {
-	return _display_offset;
+//	std::vector<std::string> ret;
+
+	switch (menus.size())
+	{
+		case 1:
+			return galaxy.getDisplayables();
+			break;
+		case 2:
+			return galaxy.getSys(menus[0]->_selected).getDisplayables();
+			break;
+		case 3:
+			return galaxy.getSys(menus[0]->_selected).getPlanet(menus[1]->_selected).getDisplayables();
+			break;
+	}
+	return (galaxy.getSys(menus[0]->_selected).getDisplayables());
+//	return (ret);
+}
+
+Menu	&Menu::operator++()
+{
+	_selected++;
+	if (_selected > static_cast<int>(_selectables.size() - 1))
+		_selected = static_cast<int>(_selectables.size() - 1);
+	return (*this);
+}
+
+Menu	Menu::operator++(int)
+{
+	Menu tmp = *this;
+	++*this;
+	return tmp;
+}
+
+Menu	&Menu::operator--()
+{
+	_selected--;
+	if (_selected < 0)
+		_selected = 0;
+	return (*this);
+}
+
+Menu	Menu::operator--(int)
+{
+	Menu tmp = *this;
+	--*this;
+	return tmp;
 }
 
 int Menu::getArrowX()
