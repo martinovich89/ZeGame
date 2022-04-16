@@ -1,5 +1,6 @@
 #include "Player.hpp"
 
+std::string	resources[6] = {"Ore", "Gaz", "Pearl", "Aether", "Uranium", "Adamantium"};
 size_t userId = 1;
 
 Player::Player() : _id(userId), _name("unnamed"), _resources(), _lastCheck(get_time()), _extractors()

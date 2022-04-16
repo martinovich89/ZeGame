@@ -7,7 +7,9 @@ Planet::Planet()
 	_hasOceans(my_random(0, 1 + INCLUSIVE)),
 	_hasAtmosphere(my_random(0, 1 + INCLUSIVE)),
 	_ownerId(0),
-	_displayable_actions(new std::vector<std::string>[8])
+	_selectable_actions(),
+	_displayable_actions(new std::vector<std::string>[8]),
+	_slots()
 {
 	unsigned randResource = my_random(2, 6);
 
@@ -117,6 +119,11 @@ std::vector<std::string> &Planet::getSelectables()
 std::vector<std::string> *Planet::getDisplayables()
 {
 	return _displayable_actions;
+}
+
+Slot	*Planet::getSlots()
+{
+	return _slots;
 }
 
 std::ostream	&operator<<(std::ostream &out, Planet &toPrint)

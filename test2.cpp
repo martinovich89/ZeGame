@@ -38,6 +38,8 @@ int main(void)
 	std::vector<Menu> menus;
 
 	menus.push_back(first);
+	menus.push_back(Menu(sv2, sv1));
 	std::cout << menus.back()._selectables[0] << std::endl;
+	std::cout << menus[0]._selectables[0] << std::endl;
 	return (0);
 }

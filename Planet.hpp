@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include "Utils.hpp"
+#include "Slot.hpp"
 
 class Planet
 {
@@ -17,6 +18,7 @@ class Planet
 		std::vector<std::string>	_selectable_actions;
 		std::vector<std::string>	*_displayable_actions;
 		int							_selected;
+		Slot						_slots[10];
 
 	public :
 		Planet();
@@ -35,6 +37,7 @@ class Planet
 	id			getId() const;
 	std::vector<std::string> &getSelectables();
 	std::vector<std::string> *getDisplayables();
+	Slot		*getSlots();
 
 	void		setId(id id);
 	void		setOwnerID(const size_t &id);

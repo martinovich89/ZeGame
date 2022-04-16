@@ -32,11 +32,11 @@ System::System()
 
 System::~System()
 {
-	delete [] _planets;
 	delete [] _displayables;
+	delete [] _planets;
 }
 
-System::System(const System &other) : _starSize(0), _planetAmount(0), _planets(), _cometFrequency(0)
+System::System(const System &other) : _starSize(0), _planetAmount(0), _planets(), _cometFrequency(0), _displayables()
 {
 	*this = other;
 }
@@ -49,7 +49,9 @@ System	&System::operator=(const System &other)
 	_starSize = other._starSize;
 	_planetAmount = other._planetAmount;
 	delete [] _planets;
+	delete [] _displayables;
 	_planets = new Planet[other._planetAmount];
+	_displayables = new std::vector<std::string>[other._planetAmount];
 	_cometFrequency = other._cometFrequency;
 
 	(void)other;

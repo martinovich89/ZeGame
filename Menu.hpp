@@ -28,8 +28,8 @@ class Menu
 		Menu operator--(int);
 
 		void	display(WINDOW *win);		
-		std::vector<std::string> &pick_selectable(Galaxy &galaxy, const std::vector<Menu *> &menus);
-		std::vector<std::string> *pick_displayable(Galaxy &galaxy, const std::vector<Menu *> &menus);
+		std::vector<std::string> &pick_selectable(Galaxy &galaxy, const std::vector<Menu> &menus);
+		std::vector<std::string> *pick_displayable(Galaxy &galaxy, const std::vector<Menu> &menus);
 
 		int	getArrowY();
 		int	getArrowX();

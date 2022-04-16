@@ -61,41 +61,53 @@ void	Menu::display(WINDOW *win)
 	}
 }
 
-std::vector<std::string> &Menu::pick_selectable(Galaxy &galaxy, const std::vector<Menu *> &menus)
+std::vector<std::string> &Menu::pick_selectable(Galaxy &galaxy, const std::vector<Menu> &menus)
 {
 //	std::vector<std::string> ret;
+	Planet &planet = galaxy.getSys(menus[0]._selected).getPlanet(menus[1]._selected);
 
 	switch (menus.size())
 	{
 		case 1:
-			return (galaxy.getSys(menus[0]->_selected).getSelectables());
+			return (galaxy.getSys(menus[0]._selected).getSelectables());
 			break;
 		case 2:
-			return (galaxy.getSys(menus[0]->_selected).getPlanet(menus[1]->_selected).getSelectables());
+			return (planet.getSelectables());
 			break;
 		case 3:
+			switch (menus.back()._selected)
+			{
+				case 0:
+					return (planet.getSlots()[_selected].getSelectables());
+					break;
+				case 1:
+					break;
+				case 2:
+					break;
+			}
 			break;
 	}
-	return (galaxy.getSys(menus[0]->_selected).getSelectables());
+	return (galaxy.getSelectables());
 //	return (ret);
 }
 
-std::vector<std::string> *Menu::pick_displayable(Galaxy &galaxy, const std::vector<Menu *> &menus)
+std::vector<std::string> *Menu::pick_displayable(Galaxy &galaxy, const std::vector<Menu> &menus)
 {
 //	std::vector<std::string> ret;
+	Planet &planet = galaxy.getSys(menus[0]._selected).getPlanet(menus[1]._selected);
 
 	switch (menus.size())
 	{
 		case 1:
-			return (galaxy.getSys(menus[0]->_selected).getDisplayables());
+			return (galaxy.getSys(menus[0]._selected).getDisplayables());
 			break;
 		case 2:
-			return (galaxy.getSys(menus[0]->_selected).getPlanet(menus[1]->_selected).getDisplayables());
+			return (planet.getDisplayables());
 			break;
 		case 3:
 			break;
 	}
-	return (galaxy.getSys(menus[0]->_selected).getDisplayables());
+	return (galaxy.getSys(menus[0]._selected).getDisplayables());
 //	return (ret);
 }
 
