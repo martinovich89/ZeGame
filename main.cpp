@@ -283,7 +283,7 @@ int main(void)
 				(menus.back())++;
 				break;
 			case 'e':
-				if (menus.size() < 3)
+				if (menus.size() < 3 || (menus.size() == 3 && menus.back()._selected < 2))
 					menus.push_back(Menu(menus.back().pick_selectable(bigMama, menus), menus.back().pick_displayable(bigMama, menus)));
 				wclear(win[window]);
 				break;

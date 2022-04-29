@@ -81,8 +81,7 @@ std::vector<std::string> &Menu::pick_selectable(Galaxy &galaxy, const std::vecto
 					return (planet.getSlots()[_selected].getSelectables());
 					break;
 				case 1:
-					break;
-				case 2:
+					return (planet.getSlots()[_selected].getSelectables());
 					break;
 			}
 			break;
